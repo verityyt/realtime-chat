@@ -52,6 +52,11 @@ fun main() {
 
             }
 
+            get("/save") {
+                database.export()
+                call.respondText("Saved database!")
+            }
+
         }
 
     }
