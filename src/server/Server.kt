@@ -18,6 +18,16 @@ fun main() {
             get("/") {
                 call.respondText("Ready!")
             }
+
+            get("/send") {
+                val user = call.request.queryParameters["user"].toString()
+                val msg = call.request.queryParameters["message"].toString()
+
+                database.add(user, msg)
+
+                call.respondText("$user: $msg")
+            }
+
         }
 
     }
