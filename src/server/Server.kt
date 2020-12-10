@@ -28,6 +28,29 @@ fun main() {
                 call.respondText("$user: $msg")
             }
 
+            get("/messages") {
+
+                var result = "No messages found!"
+
+                for (message in database.messages) {
+                    val user = message.key
+                    val hashmap = database.messages[user] as java.util.HashMap<Long, String>
+                    for (message2 in hashmap) {
+                        val time = SimpleDateFormat("dd.MM.yy HH:mm:ss").format(message2.key)
+                        val text = message2.value
+
+                        if(result == "No messages found!") {
+                            result = ""
+                        }
+
+                        result += "$time | $user: $text\n"
+                    }
+                }
+
+                call.respondText(result)
+
+            }
+
         }
 
     }
