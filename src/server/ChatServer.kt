@@ -1,5 +1,7 @@
 package server
 
+import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -18,6 +20,9 @@ class ChatServer(val port: Int) {
 
     private var input2: BufferedReader? = null
     private var output2: PrintWriter? = null
+
+    private var username1: String? = null
+    private var username2: String? = null
 
     fun start() {
         println("Starting chat server on port $port...")
@@ -58,7 +63,7 @@ class ChatServer(val port: Int) {
                 try {
                     val input = input1!!.readLine()
 
-                    println("New message from User 1: $input")
+                    handleInput(input, clientSocket1!!)
                 }catch (e: SocketException) {
                     if(e.message == "Connection reset") {
                         println("User 1 disconnected! ${clientSocket1!!.inetAddress}")
@@ -80,7 +85,7 @@ class ChatServer(val port: Int) {
                 try {
                     val input = input2!!.readLine()
 
-                    println("New message from User 2: $input")
+                    handleInput(input, clientSocket2!!)
                 }catch (e: SocketException) {
                     if(e.message == "Connection reset") {
                         println("User 2 disconnected!")
@@ -95,6 +100,37 @@ class ChatServer(val port: Int) {
                 }
             }
         }.start()
+    }
+
+    private fun handleInput(input: String, client: Socket) {
+
+        val json = JSONParser().parse(input) as JSONObject
+        val action = json["action"].toString()
+        val extra = json["extra"].toString()
+
+        if(action == "IDENTIFY") {
+            if(client == clientSocket1) {
+                username1 = extra
+            }else if(client == clientSocket2) {
+                username2 = extra
+            }
+        }else if(action == "MESSAGE") {
+            if(client == clientSocket1) {
+                sendPaket(action, extra, username1!!, output2!!)
+            }else if(client == clientSocket2) {
+                sendPaket(action, extra, username2!!, output1!!)
+            }
+        }
+
+    }
+
+    private fun sendPaket(action: String, extra: String, extra2: String, output: PrintWriter) {
+        val json = JSONObject()
+        json["action"] = action
+        json["extra"] = extra
+        json["extra2"] = extra2
+
+        output.println(json.toJSONString())
     }
 
 }

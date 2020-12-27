@@ -1,5 +1,7 @@
 package client
 
+import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -16,21 +18,46 @@ fun main() {
     output = PrintWriter(clientSocket.getOutputStream(),true )
     input = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
 
-    while(true) { }
+    sendPaket("IDENTIFY","verity")
 
-    /*Timer().schedule(object : TimerTask() {
+    Timer().schedule(object : TimerTask() {
         override fun run() {
-            sendMessage("Hello there!")
+            sendPaket("MESSAGE", "Hello I am watching 8auer!")
         }
 
-    }, 25000)*/
+    },30000)
+
+    awaitMessages()
+
+    while(true) { }
 
 }
 
-private fun sendMessage(message: String) {
+private fun awaitMessages() {
+    Thread {
+        while(true) {
+            val input = input.readLine()
 
-    output.println(message)
-    val answer = input.readLine()
-    println(answer)
+            handleInput(input)
+        }
+    }.start()
+}
 
+private fun handleInput(input: String) {
+    val json = JSONParser().parse(input) as JSONObject
+    val action = json["action"].toString()
+    val extra = json["extra"].toString()
+    val extra2 = json["extra2"].toString()
+
+    if(action == "MESSAGE") {
+        println("$extra2: $extra")
+    }
+}
+
+private fun sendPaket(action: String, extra: String) {
+    val json = JSONObject()
+    json["action"] = action
+    json["extra"] = extra
+
+    output.println(json.toJSONString())
 }
