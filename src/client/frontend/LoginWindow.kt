@@ -1,6 +1,7 @@
 package client.frontend
 
 import client.frontend.listener.LoginClickListener
+import client.frontend.listener.LoginKeyListener
 import java.awt.*
 import java.io.File
 import javax.imageio.ImageIO
@@ -13,9 +14,10 @@ class LoginWindow {
     lateinit var window: JFrame
     lateinit var component: JComponent
 
-    lateinit var usernameInput: client.frontend.widgets.TextField
-    lateinit var chatIdInput: client.frontend.widgets.TextField
-    lateinit var chatPwInput: client.frontend.widgets.TextField
+    var usernameInput =
+        client.frontend.widgets.TextField(Color.white, 3f, 400, 360, 25f, "Username")
+    var chatIdInput =
+        client.frontend.widgets.TextField(Color.white, 3f, 400, 420, 25f, "Chat-ID")
 
     fun build() {
 
@@ -31,14 +33,8 @@ class LoginWindow {
                 val avatar = ImageIO.read(File("assets/images/avatar.png"))
                 g.drawImage(avatar, 525, 172, 150, 150, this)
 
-                usernameInput = client.frontend.widgets.TextField(g, g2, Color.white, 3f, 400, 360, 25f,"Username")
-                usernameInput.draw()
-
-                chatIdInput = client.frontend.widgets.TextField(g, g2, Color.white, 3f, 400, 420, 25f,"Chat-ID")
-                chatIdInput.draw()
-
-                chatPwInput = client.frontend.widgets.TextField(g, g2, Color.white, 3f, 400, 480, 25f,"Chat-PW")
-                chatPwInput.draw()
+                usernameInput.draw(g, g2)
+                chatIdInput.draw(g, g2)
 
             }
 
@@ -53,6 +49,7 @@ class LoginWindow {
         window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
 
         window.addMouseListener(LoginClickListener())
+        window.addKeyListener(LoginKeyListener())
 
         window.isUndecorated = false
         window.setSize(1200, 700)
