@@ -3,6 +3,9 @@ package client.frontend
 import client.frontend.listener.MouseListener
 import client.frontend.listener.KeyListener
 import client.frontend.utils.FontRenderer
+import client.frontend.utils.WindowContent
+import client.frontend.widgets.ButtonWidget
+import client.frontend.widgets.TextFieldWidget
 import java.awt.*
 import java.io.File
 import javax.imageio.ImageIO
@@ -12,28 +15,26 @@ import javax.swing.WindowConstants
 
 object Window {
 
+    var content = WindowContent.LOGIN
     lateinit var frame: JFrame
     private lateinit var component: JComponent
 
-    var usernameInput =
-        client.frontend.widgets.TextField(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
-    var chatIdInput =
-        client.frontend.widgets.TextField(Color.white, Color.gray, 3f, 400, 420, 25f, "Chat-ID", "NUMBERS", 4)
-    var enterButton =
-        client.frontend.widgets.Button(Color.white, 3f, 400, 480, 25f, "Enter") {
-            if(usernameInput.text == "") {
-                usernameInput.error()
-            }
-            if(chatIdInput.text == "") {
-                chatIdInput.error()
-            }
-            if(usernameInput.text != "" && chatIdInput.text != "") {
-                println("Correct everything is filled")
-            }
+    var usernameInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
+    var chatIdInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 420, 25f, "Chat-ID", "NUMBERS", 4)
+    var enterButton = ButtonWidget(Color.white, 3f, 400, 480, 25f, "Enter") {
+        if (usernameInput.text == "") {
+            usernameInput.error()
         }
+        if (chatIdInput.text == "") {
+            chatIdInput.error()
+        }
+        if (usernameInput.text != "" && chatIdInput.text != "") {
+            println("Correct everything is filled")
+        }
+    }
 
     fun build() {
-        FontRenderer.renderLogin()
+        FontRenderer.renderAll()
 
         component = object : JComponent() {
             override fun paint(g: Graphics) {
@@ -41,16 +42,17 @@ object Window {
 
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 
-                val wallpaper = ImageIO.read(File("assets/images/wallpaper.png"))
-                g.drawImage(wallpaper, 0, 0, 1200, 700, this)
+                if (content == WindowContent.LOGIN) {
+                    val wallpaper = ImageIO.read(File("assets/images/wallpaper.png"))
+                    g.drawImage(wallpaper, 0, 0, 1200, 700, this)
 
-                val avatar = ImageIO.read(File("assets/images/avatar.png"))
-                g.drawImage(avatar, 525, 172, 150, 150, this)
+                    val avatar = ImageIO.read(File("assets/images/avatar.png"))
+                    g.drawImage(avatar, 525, 172, 150, 150, this)
 
-                usernameInput.draw(g, g2)
-                chatIdInput.draw(g, g2)
-                enterButton.draw(g, g2)
-
+                    usernameInput.draw(g, g2)
+                    chatIdInput.draw(g, g2)
+                    enterButton.draw(g, g2)
+                }
             }
 
             override fun update(g: Graphics) {

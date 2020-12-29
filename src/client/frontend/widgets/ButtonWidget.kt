@@ -8,7 +8,7 @@ import java.awt.Graphics2D
 import java.awt.event.KeyEvent
 import java.awt.geom.RoundRectangle2D
 
-class Button(
+class ButtonWidget(
     private val color: Color,
     private val stroke: Float,
     private val x: Int,

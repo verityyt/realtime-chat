@@ -8,7 +8,7 @@ import java.awt.Graphics2D
 import java.awt.event.KeyEvent
 import java.awt.geom.RoundRectangle2D
 
-class TextField(
+class TextFieldWidget(
     private var color: Color,
     private val focusedColor: Color,
     private val stroke: Float,
