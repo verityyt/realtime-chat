@@ -2,6 +2,7 @@ package client.frontend
 
 import client.frontend.listener.MouseListener
 import client.frontend.listener.KeyListener
+import client.frontend.utils.FontRenderer
 import java.awt.*
 import java.io.File
 import javax.imageio.ImageIO
@@ -32,6 +33,7 @@ object Window {
         }
 
     fun build() {
+        FontRenderer.renderLogin()
 
         component = object : JComponent() {
             override fun paint(g: Graphics) {

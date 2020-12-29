@@ -8,7 +8,7 @@ object FontRenderer {
 
     lateinit var regular: Font
 
-    fun renderAll() {
+    fun renderLogin() {
         renderRegular()
     }
 
