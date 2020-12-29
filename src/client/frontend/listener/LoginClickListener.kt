@@ -10,6 +10,7 @@ class LoginClickListener : MouseListener {
         if (e != null) {
             Client.loginWindow.usernameInput.onClick(e.x, e.y)
             Client.loginWindow.chatIdInput.onClick(e.x, e.y)
+            Client.loginWindow.enterButton.onClick(e.x, e.y)
         }
     }
 

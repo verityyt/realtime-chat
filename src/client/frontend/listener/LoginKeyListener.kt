@@ -6,12 +6,15 @@ import java.awt.event.KeyListener
 
 class LoginKeyListener : KeyListener {
 
-    override fun keyTyped(e: KeyEvent?) { }
+    override fun keyTyped(e: KeyEvent?) {}
 
-    override fun keyPressed(e: KeyEvent?) { }
+    override fun keyPressed(e: KeyEvent?) {}
 
     override fun keyReleased(e: KeyEvent?) {
-        Client.loginWindow.usernameInput.onRelease(e!!)
+        if (e != null) {
+            Client.loginWindow.usernameInput.onRelease(e)
+            Client.loginWindow.chatIdInput.onRelease(e)
+        }
     }
 
 }

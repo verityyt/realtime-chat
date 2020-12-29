@@ -15,9 +15,21 @@ class LoginWindow {
     lateinit var component: JComponent
 
     var usernameInput =
-        client.frontend.widgets.TextField(Color.white, 3f, 400, 360, 25f, "Username")
+        client.frontend.widgets.TextField(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
     var chatIdInput =
-        client.frontend.widgets.TextField(Color.white, 3f, 400, 420, 25f, "Chat-ID")
+        client.frontend.widgets.TextField(Color.white, Color.gray, 3f, 400, 420, 25f, "Chat-ID", "NUMBERS", 4)
+    var enterButton =
+        client.frontend.widgets.Button(Color.white, 3f, 400, 480, 25f, "Enter") {
+            if(usernameInput.text == "") {
+                usernameInput.error()
+            }
+            if(chatIdInput.text == "") {
+                chatIdInput.error()
+            }
+            if(usernameInput.text != "" && chatIdInput.text != "") {
+                println("Correct everything is filled")
+            }
+        }
 
     fun build() {
 
@@ -35,6 +47,7 @@ class LoginWindow {
 
                 usernameInput.draw(g, g2)
                 chatIdInput.draw(g, g2)
+                enterButton.draw(g, g2)
 
             }
 
