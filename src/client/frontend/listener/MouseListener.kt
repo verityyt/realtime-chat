@@ -1,16 +1,16 @@
 package client.frontend.listener
 
-import client.Client
+import client.frontend.Window
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 
-class LoginClickListener : MouseListener {
+class MouseListener : MouseListener {
 
     override fun mouseClicked(e: MouseEvent?) {
         if (e != null) {
-            Client.loginWindow.usernameInput.onClick(e.x, e.y)
-            Client.loginWindow.chatIdInput.onClick(e.x, e.y)
-            Client.loginWindow.enterButton.onClick(e.x, e.y)
+            Window.usernameInput.onClick(e.x, e.y)
+            Window.chatIdInput.onClick(e.x, e.y)
+            Window.enterButton.onClick(e.x, e.y)
         }
     }
 

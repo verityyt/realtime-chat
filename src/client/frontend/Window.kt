@@ -1,7 +1,7 @@
 package client.frontend
 
-import client.frontend.listener.LoginClickListener
-import client.frontend.listener.LoginKeyListener
+import client.frontend.listener.MouseListener
+import client.frontend.listener.KeyListener
 import java.awt.*
 import java.io.File
 import javax.imageio.ImageIO
@@ -9,10 +9,10 @@ import javax.swing.JComponent
 import javax.swing.JFrame
 import javax.swing.WindowConstants
 
-class LoginWindow {
+object Window {
 
-    lateinit var window: JFrame
-    lateinit var component: JComponent
+    lateinit var frame: JFrame
+    private lateinit var component: JComponent
 
     var usernameInput =
         client.frontend.widgets.TextField(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
@@ -56,26 +56,26 @@ class LoginWindow {
             }
         }
 
-        window = JFrame()
-        window.add(component)
+        frame = JFrame()
+        frame.add(component)
 
-        window.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+        frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
 
-        window.addMouseListener(LoginClickListener())
-        window.addKeyListener(LoginKeyListener())
+        frame.addMouseListener(MouseListener())
+        frame.addKeyListener(KeyListener())
 
-        window.isUndecorated = false
-        window.setSize(1200, 700)
-        window.isResizable = false
-        window.isAlwaysOnTop = false
-        window.title = "Realtime Chat | Login"
+        frame.isUndecorated = false
+        frame.setSize(1200, 700)
+        frame.isResizable = false
+        frame.isAlwaysOnTop = false
+        frame.title = "Realtime Chat | Login"
 
-        window.isVisible = true
+        frame.isVisible = true
 
         Thread {
             while (true) {
                 Thread.sleep(1000 / 60)
-                window.repaint()
+                frame.repaint()
             }
         }.start()
 
