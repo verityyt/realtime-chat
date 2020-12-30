@@ -7,7 +7,7 @@ import client.frontend.listener.KeyListener
 import client.frontend.utils.FontRenderer
 import client.frontend.utils.WindowContent
 import client.frontend.widgets.ButtonWidget
-import client.frontend.widgets.ClearTextFieldWidget
+import client.frontend.widgets.CleanTextFieldWidget
 import client.frontend.widgets.MessageWidget
 import client.frontend.widgets.TextFieldWidget
 import java.awt.*
@@ -46,7 +46,7 @@ object Window {
         }
     }
     var chatTextInput =
-        ClearTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 610, 20f, "Write text...", maxLength = 200)
+        CleanTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 610, 20f, "Write text...", maxLength = 200)
 
     fun build() {
         FontRenderer.renderAll()
@@ -114,6 +114,8 @@ object Window {
         frame.isResizable = false
         frame.isAlwaysOnTop = false
         frame.title = "Realtime Chat | Login"
+
+        frame.iconImage = ImageIO.read(File("assets/images/icon.png"))
 
         frame.isVisible = true
 
