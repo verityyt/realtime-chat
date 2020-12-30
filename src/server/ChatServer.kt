@@ -63,7 +63,7 @@ class ChatServer(val port: Int) {
                 }
             }
         }catch(e: SocketException) {
-            if(e.message != "Socket closed") {
+            if(e.message != "socket closed") {
                 e.printStackTrace()
             }
         }
@@ -142,12 +142,12 @@ class ChatServer(val port: Int) {
         json["extra"] = extra
         json["extra2"] = extra2
 
-        output.print(json.toJSONString())
+        output.println(json.toJSONString())
     }
 
     private fun print(text: String) {
         if(display) {
-            print("[Server #$port] $text")
+            println("[Server #$port] $text")
         }
     }
 

@@ -8,6 +8,11 @@ val servers = mutableListOf<ChatServer>()
 
 object Server {
 
+    @JvmStatic
+    fun main(args: Array<String>) {
+        awaitCommand()
+    }
+
     fun awaitCommand() {
 
         val input = BufferedReader(InputStreamReader(System.`in`)).readLine()
@@ -110,8 +115,4 @@ object Server {
         awaitCommand()
     }
 
-}
-
-fun main() {
-    Server.awaitCommand()
 }

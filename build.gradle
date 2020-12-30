@@ -12,8 +12,9 @@ apply plugin: 'kotlin'
 apply plugin: 'application'
 
 group 'net.verity'
-version '1.0.0'
-mainClassName = "io.ktor.server.netty.EngineMain"
+version '1.0'
+/*mainClassName = "server.Server"*/
+mainClassName = "client.Client"
 
 sourceSets {
     main.kotlin.srcDirs = main.java.srcDirs = ['src']

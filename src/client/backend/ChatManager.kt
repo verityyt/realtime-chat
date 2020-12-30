@@ -14,22 +14,22 @@ private lateinit var input: BufferedReader
 
 object ChatManager {
 
-    fun startChat(port: Int) {
+    fun startChat(port: Int, username: String) {
 
-        clientSocket = Socket("0.0.0.0", port)
+        clientSocket = Socket("192.168.155.40", port)
         output = PrintWriter(clientSocket.getOutputStream(), true)
         input = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
 
-        sendPaket("IDENTIFY", "verity")
+        sendPaket("IDENTIFY", username)
 
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                sendPaket("MESSAGE", "Hello I am watching 8auer!")
-            }
-
-        }, 30000)
+        println("Erfolgreich mit ChatServer $port verbunden! (Tippen + Enter um eine Nachricht zusenden) \n")
 
         awaitMessages()
+
+        while (true) {
+            val input = BufferedReader(InputStreamReader(System.`in`)).readLine()
+            sendPaket("MESSAGE", input)
+        }
 
     }
 
@@ -44,6 +44,7 @@ object ChatManager {
     }
 
     private fun handleInput(input: String) {
+
         val json = JSONParser().parse(input) as JSONObject
         val action = json["action"].toString()
         val extra = json["extra"].toString()
