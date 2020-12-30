@@ -24,7 +24,7 @@ class ChatServer(val port: Int) {
     private var username1: String? = null
     private var username2: String? = null
 
-    var display = false
+    var display = true
 
     fun start() {
         Thread {
@@ -65,6 +65,8 @@ class ChatServer(val port: Int) {
         }catch(e: SocketException) {
             if(e.message != "socket closed") {
                 e.printStackTrace()
+            }else {
+                print("Socket closed")
             }
         }
     }
@@ -74,6 +76,8 @@ class ChatServer(val port: Int) {
             while(true) {
                 try {
                     val input = input1!!.readLine()
+
+                    print("New packet from user 1: $input")
 
                     handleInput(input, clientSocket1!!)
                 }catch (e: SocketException) {
@@ -96,6 +100,8 @@ class ChatServer(val port: Int) {
             while(true) {
                 try {
                     val input = input2!!.readLine()
+
+                    print("New packet from user 2: $input")
 
                     handleInput(input, clientSocket2!!)
                 }catch (e: SocketException) {
@@ -141,6 +147,13 @@ class ChatServer(val port: Int) {
         json["action"] = action
         json["extra"] = extra
         json["extra2"] = extra2
+
+        val user = if(output == output1) {
+            "1"
+        }else {
+            "2"
+        }
+        print("Sending packet to to user $user... (${json.toJSONString()})")
 
         output.println(json.toJSONString())
     }
