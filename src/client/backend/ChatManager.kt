@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
+import java.net.ConnectException
 import java.net.Socket
 import java.util.*
 
@@ -17,13 +18,17 @@ object ChatManager {
 
     fun startChat(port: Int, username: String) {
         Thread {
-            clientSocket = Socket("192.168.155.40", port)
-            output = PrintWriter(clientSocket.getOutputStream(), true)
-            input = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
+            try {
+                clientSocket = Socket("192.168.155.40", port)
+                output = PrintWriter(clientSocket.getOutputStream(), true)
+                input = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
 
-            sendPaket("IDENTIFY", username)
+                sendPaket("IDENTIFY", username)
 
-            awaitMessages()
+                awaitMessages()
+            }catch(e: ConnectException) {
+                Client.onConnectExp(port)
+            }
         }.start()
     }
 

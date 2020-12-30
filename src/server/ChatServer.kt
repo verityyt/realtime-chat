@@ -63,11 +63,7 @@ class ChatServer(val port: Int) {
                 }
             }
         }catch(e: SocketException) {
-            if(e.message != "Socket closed" && e.message != "socket closed") {
-                e.printStackTrace()
-            }else {
-                print("Socket closed")
-            }
+            print("Socket closed")
         }
     }
 

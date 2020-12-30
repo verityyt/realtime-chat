@@ -23,11 +23,10 @@ object Client {
 
         messages.add(Pair(username, content))
 
-        for(message in messages) {
-            println("${messages.indexOf(message)} | ${message.first} | ${message.second}")
-        }
-        println("----")
+    }
 
+    fun onConnectExp(port: Int) {
+        // No server on port $port running
     }
 
 }
