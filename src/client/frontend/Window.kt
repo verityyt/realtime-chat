@@ -1,13 +1,19 @@
 package client.frontend
 
+import client.Client
 import client.frontend.listener.MouseListener
 import client.frontend.listener.KeyListener
 import client.frontend.utils.FontRenderer
 import client.frontend.utils.WindowContent
 import client.frontend.widgets.ButtonWidget
+import client.frontend.widgets.ClearTextFieldWidget
+import client.frontend.widgets.MessageWidget
 import client.frontend.widgets.TextFieldWidget
 import java.awt.*
+import java.awt.geom.RoundRectangle2D
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.imageio.ImageIO
 import javax.swing.JComponent
 import javax.swing.JFrame
@@ -15,9 +21,12 @@ import javax.swing.WindowConstants
 
 object Window {
 
-    var content = WindowContent.LOGIN
+    var content = WindowContent.CHAT
     lateinit var frame: JFrame
     private lateinit var component: JComponent
+
+    var username = "Joshua"
+    var chatId = "8080"
 
     var usernameInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
     var chatIdInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 420, 25f, "Chat-ID", "NUMBERS", 4)
@@ -29,9 +38,14 @@ object Window {
             chatIdInput.error()
         }
         if (usernameInput.text != "" && chatIdInput.text != "") {
-            println("Correct everything is filled")
+            username = usernameInput.text
+            chatId = chatIdInput.text
+            content = WindowContent.CHAT
         }
     }
+
+    var chatTextInput =
+        ClearTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 610, 20f, "Write text...", maxLength = 200)
 
     fun build() {
         FontRenderer.renderAll()
@@ -43,7 +57,7 @@ object Window {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 
                 if (content == WindowContent.LOGIN) {
-                    val wallpaper = ImageIO.read(File("assets/images/wallpaper.png"))
+                    val wallpaper = ImageIO.read(File("assets/images/login_wallpaper.png"))
                     g.drawImage(wallpaper, 0, 0, 1200, 700, this)
 
                     val avatar = ImageIO.read(File("assets/images/avatar.png"))
@@ -52,6 +66,33 @@ object Window {
                     usernameInput.draw(g, g2)
                     chatIdInput.draw(g, g2)
                     enterButton.draw(g, g2)
+                } else {
+                    val wallpaper = ImageIO.read(File("assets/images/chat_wallpaper.png"))
+                    g.drawImage(wallpaper, 0, 0, 1200, 700, this)
+
+                    g2.paint = Color(255, 255, 255, 150)
+                    g2.fill(RoundRectangle2D.Float(940f, 0f, 270f, 675f, 15f, 15f))
+
+                    g.color = Color.black
+                    g.font = FontRenderer.regular.deriveFont(15f)
+                    g.drawString("Username: $username", 950, 20)
+                    g.drawString("Chat-ID: $chatId", 950, 40)
+
+                    g.font = FontRenderer.bold.deriveFont(40f)
+                    g.drawString(SimpleDateFormat("HH:mm").format(Date()), 1070, 630)
+
+                    g.font = FontRenderer.regular.deriveFont(25f)
+                    g.drawString(SimpleDateFormat("dd.MMMMM yyyy").format(Date()), 960, 655)
+
+                    chatTextInput.draw(g, g2, this)
+
+                    var number = 1
+                    for (index in Client.messages.keys) {
+                        val map = Client.messages[index]
+                        MessageWidget(map!!.keys.first(), map.values.first(), number).draw(g, g2)
+                        number++
+                    }
+
                 }
             }
 

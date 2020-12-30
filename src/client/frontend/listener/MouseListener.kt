@@ -11,6 +11,7 @@ class MouseListener : MouseListener {
             Window.usernameInput.onClick(e.x, e.y)
             Window.chatIdInput.onClick(e.x, e.y)
             Window.enterButton.onClick(e.x, e.y)
+            Window.chatTextInput.onClick(e.x,e.y)
         }
     }
 

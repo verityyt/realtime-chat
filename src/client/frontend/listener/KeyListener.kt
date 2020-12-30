@@ -14,6 +14,7 @@ class KeyListener : KeyListener {
         if (e != null) {
             Window.usernameInput.onRelease(e)
             Window.chatIdInput.onRelease(e)
+            Window.chatTextInput.onRelease(e)
         }
     }
 
