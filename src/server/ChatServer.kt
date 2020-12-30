@@ -11,7 +11,7 @@ import java.net.SocketException
 
 class ChatServer(val port: Int) {
 
-    private lateinit var serverSocket: ServerSocket
+    lateinit var serverSocket: ServerSocket
     private var clientSocket1: Socket? = null
     private var clientSocket2: Socket? = null
 
@@ -24,35 +24,47 @@ class ChatServer(val port: Int) {
     private var username1: String? = null
     private var username2: String? = null
 
+    var display = false
+
     fun start() {
-        println("Starting chat server on port $port...")
+        Thread {
+            print("Starting chat server on port $port...")
 
-        serverSocket = ServerSocket(port)
+            serverSocket = ServerSocket(port)
 
-        println("Chat server on port $port successfully started!")
+            print("Chat server on port $port successfully started!")
 
-        awaitUsers()
+            awaitUsers()
+        }.start()
+        Thread.sleep(1000)
     }
 
     private fun awaitUsers() {
-        println("Awaiting users...")
+        print("Awaiting users...")
 
-        while(clientSocket1 == null || clientSocket2 == null) {
-            if(clientSocket1 == null) {
-                clientSocket1 = serverSocket.accept()
-                input1 = BufferedReader(InputStreamReader(clientSocket1!!.getInputStream()))
-                output1 = PrintWriter(clientSocket1!!.getOutputStream(), true)
+        try {
+            while(clientSocket1 == null || clientSocket2 == null) {
+                if(clientSocket1 == null) {
 
-                println("User 1 connected! ${clientSocket1!!.inetAddress}")
-                awaitMessages1()
+                    clientSocket1 = serverSocket.accept()
+                    input1 = BufferedReader(InputStreamReader(clientSocket1!!.getInputStream()))
+                    output1 = PrintWriter(clientSocket1!!.getOutputStream(), true)
 
-            }else if(clientSocket2 == null) {
-                clientSocket2 = serverSocket.accept()
-                input2 = BufferedReader(InputStreamReader(clientSocket2!!.getInputStream()))
-                output2 = PrintWriter(clientSocket2!!.getOutputStream(), true)
+                    print("User 1 connected! ${clientSocket1!!.inetAddress}")
+                    awaitMessages1()
 
-                println("User 2 connected! ${clientSocket1!!.inetAddress}")
-                awaitMessages2()
+                }else if(clientSocket2 == null) {
+                    clientSocket2 = serverSocket.accept()
+                    input2 = BufferedReader(InputStreamReader(clientSocket2!!.getInputStream()))
+                    output2 = PrintWriter(clientSocket2!!.getOutputStream(), true)
+
+                    print("User 2 connected! ${clientSocket1!!.inetAddress}")
+                    awaitMessages2()
+                }
+            }
+        }catch(e: SocketException) {
+            if(e.message != "Socket closed") {
+                e.printStackTrace()
             }
         }
     }
@@ -66,7 +78,7 @@ class ChatServer(val port: Int) {
                     handleInput(input, clientSocket1!!)
                 }catch (e: SocketException) {
                     if(e.message == "Connection reset") {
-                        println("User 1 disconnected! ${clientSocket1!!.inetAddress}")
+                        print("User 1 disconnected! ${clientSocket1!!.inetAddress}")
                         clientSocket1 = null
                         input1 = null
                         output1 = null
@@ -88,7 +100,7 @@ class ChatServer(val port: Int) {
                     handleInput(input, clientSocket2!!)
                 }catch (e: SocketException) {
                     if(e.message == "Connection reset") {
-                        println("User 2 disconnected!")
+                        print("User 2 disconnected!")
                         clientSocket2 = null
                         input2 = null
                         output2 = null
@@ -130,7 +142,13 @@ class ChatServer(val port: Int) {
         json["extra"] = extra
         json["extra2"] = extra2
 
-        output.println(json.toJSONString())
+        output.print(json.toJSONString())
+    }
+
+    private fun print(text: String) {
+        if(display) {
+            print("[Server #$port] $text")
+        }
     }
 
 }
