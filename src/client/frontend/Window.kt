@@ -1,6 +1,7 @@
 package client.frontend
 
 import client.Client
+import client.backend.ChatManager
 import client.frontend.listener.MouseListener
 import client.frontend.listener.KeyListener
 import client.frontend.utils.FontRenderer
@@ -21,12 +22,12 @@ import javax.swing.WindowConstants
 
 object Window {
 
-    var content = WindowContent.CHAT
+    var content = WindowContent.LOGIN
     lateinit var frame: JFrame
     private lateinit var component: JComponent
 
-    var username = "Joshua"
-    var chatId = "8080"
+    var username = ""
+    var chatId = ""
 
     var usernameInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
     var chatIdInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 420, 25f, "Chat-ID", "NUMBERS", 4)
@@ -40,10 +41,10 @@ object Window {
         if (usernameInput.text != "" && chatIdInput.text != "") {
             username = usernameInput.text
             chatId = chatIdInput.text
+            ChatManager.startChat(chatId.toInt(), username)
             content = WindowContent.CHAT
         }
     }
-
     var chatTextInput =
         ClearTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 610, 20f, "Write text...", maxLength = 200)
 
@@ -66,7 +67,7 @@ object Window {
                     usernameInput.draw(g, g2)
                     chatIdInput.draw(g, g2)
                     enterButton.draw(g, g2)
-                } else {
+                } else if(content == WindowContent.CHAT) {
                     val wallpaper = ImageIO.read(File("assets/images/chat_wallpaper.png"))
                     g.drawImage(wallpaper, 0, 0, 1200, 700, this)
 
@@ -87,9 +88,8 @@ object Window {
                     chatTextInput.draw(g, g2, this)
 
                     var number = 1
-                    for (index in Client.messages.keys) {
-                        val map = Client.messages[index]
-                        MessageWidget(map!!.keys.first(), map.values.first(), number).draw(g, g2)
+                    for (message in Client.messages) {
+                        MessageWidget(message.first, message.second, number).draw(g, g2)
                         number++
                     }
 

@@ -1,5 +1,8 @@
 package client.frontend.widgets
 
+import client.Client
+import client.backend.ChatManager
+import client.frontend.Window
 import client.frontend.utils.FontRenderer
 import java.awt.BasicStroke
 import java.awt.Color
@@ -25,6 +28,9 @@ class ClearTextFieldWidget(
     var isFocused = false
     var text = ""
 
+    var y2 = 0
+    var sendAdding = 0
+
     fun draw(
         g: Graphics,
         g2: Graphics2D,
@@ -40,7 +46,7 @@ class ClearTextFieldWidget(
             g2.fill(RoundRectangle2D.Float(x.toFloat(), y.toFloat() - 5f, 900f, 55f, arc, arc))
 
             val send = ImageIO.read(File("assets/images/send.png"))
-            g.drawImage(send, x + 850, y + 12, observer)
+            g.drawImage(send, x + 850, y + 8, observer)
 
             g.color = Color.decode("#323637")
             g.font = FontRenderer.regular.deriveFont(25f)
@@ -52,18 +58,18 @@ class ClearTextFieldWidget(
             val parts = text.split(" ")
             var result = ""
 
-            for(part in parts) {
+            for (part in parts) {
                 var theory = result
                 theory += "$part "
-                if(g.fontMetrics.stringWidth(theory) <= (800)) {
-                    if(part == parts[parts.size - 1]) {
+                if (g.fontMetrics.stringWidth(theory) <= (800)) {
+                    if (part == parts[parts.size - 1]) {
                         result += "$part "
                         draws.add(result)
                         break
-                    }else {
+                    } else {
                         result += "$part "
                     }
-                }else {
+                } else {
                     draws.add(result)
                     result = ""
                     result += "$part "
@@ -71,12 +77,12 @@ class ClearTextFieldWidget(
             }
 
             val drawsLasts = draws.last().split(" ")
-            if(drawsLasts[drawsLasts.size - 2] != parts.last()) {
+            if (drawsLasts[drawsLasts.size - 2] != parts.last()) {
                 draws.add(parts[parts.size - 1])
             }
 
             val h = 35 + (draws.size * 15) + 5
-            val y2 = (y + 15) - (draws.size * 15) - 5
+            y2 = (y + 15) - (draws.size * 15) - 5
 
             g2.paint = if (isFocused) {
                 focusedColor
@@ -89,14 +95,14 @@ class ClearTextFieldWidget(
             g.drawImage(send, x + 850, y2 + 12, observer)
 
             var nr = 0
-            for(draw in draws) {
+            for (draw in draws) {
                 g.color = Color.decode("#323637")
-                val value = if(draws.size > 1) {
+                sendAdding = if (draws.size > 1) {
                     32
-                }else {
+                } else {
                     35
                 }
-                g.drawString(draw, x + 15, y2 + value + (nr * 25))
+                g.drawString(draw, x + 15, y2 + sendAdding + (nr * 25))
                 nr++
             }
 
@@ -106,6 +112,15 @@ class ClearTextFieldWidget(
 
     fun onClick(x: Int, y: Int) {
         isFocused = x > this.x && x < this.x + 400 && y > this.y && y < this.y + 50
+
+        if (x >= (this.x + 850) && x <= ((this.x + 850) + 40) && y >= (y2 + 12) && y <= ((y2 + 12) + 40)) {
+            if (text != "") {
+                ChatManager.sendPaket("MESSAGE", text)
+                Client.addMessage(Window.username, text)
+                text = ""
+            }
+        }
+
     }
 
     fun onRelease(e: KeyEvent) {

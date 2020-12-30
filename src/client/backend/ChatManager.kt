@@ -1,5 +1,6 @@
 package client.backend
 
+import client.Client
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import java.io.BufferedReader
@@ -15,22 +16,15 @@ private lateinit var input: BufferedReader
 object ChatManager {
 
     fun startChat(port: Int, username: String) {
+        Thread {
+            clientSocket = Socket("192.168.155.40", port)
+            output = PrintWriter(clientSocket.getOutputStream(), true)
+            input = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
 
-        clientSocket = Socket("192.168.155.40", port)
-        output = PrintWriter(clientSocket.getOutputStream(), true)
-        input = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
+            sendPaket("IDENTIFY", username)
 
-        sendPaket("IDENTIFY", username)
-
-        println("Erfolgreich mit ChatServer $port verbunden! (Tippen + Enter um eine Nachricht zusenden) \n")
-
-        awaitMessages()
-
-        while (true) {
-            val input = BufferedReader(InputStreamReader(System.`in`)).readLine()
-            sendPaket("MESSAGE", input)
-        }
-
+            awaitMessages()
+        }.start()
     }
 
     private fun awaitMessages() {
@@ -51,11 +45,11 @@ object ChatManager {
         val extra2 = json["extra2"].toString()
 
         if (action == "MESSAGE") {
-            println("$extra2: $extra")
+            Client.addMessage(extra2, extra)
         }
     }
 
-    private fun sendPaket(action: String, extra: String) {
+    fun sendPaket(action: String, extra: String) {
         val json = JSONObject()
         json["action"] = action
         json["extra"] = extra
