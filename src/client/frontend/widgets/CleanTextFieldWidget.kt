@@ -14,7 +14,7 @@ import java.awt.image.ImageObserver
 import java.io.File
 import javax.imageio.ImageIO
 
-class ClearTextFieldWidget(
+class CleanTextFieldWidget(
     private var color: Color,
     private val focusedColor: Color,
     private var x: Int,
@@ -129,6 +129,13 @@ class ClearTextFieldWidget(
                 isFocused = false
             } else if (e.keyCode == 8 && text != "") {
                 text = text.substring(0, text.length - 1)
+            }else if(e.keyCode == 10) {
+                if (text != "") {
+                    ChatManager.sendPaket("MESSAGE", text)
+                    Client.addMessage(Window.username, text)
+                    text = ""
+                    isFocused = false
+                }
             } else {
                 if (text.length < maxLength && isAllowed(e.keyCode, e.keyChar)) {
                     text += e.keyChar.toString()
