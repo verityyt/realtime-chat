@@ -15,6 +15,13 @@ class KeyListener : KeyListener {
             Window.usernameInput.onRelease(e)
             Window.chatIdInput.onRelease(e)
             Window.chatTextInput.onRelease(e)
+
+            if(e.keyCode == 122) {
+                Window.frame.dispose()
+                Window.frame.isUndecorated = !Window.frame.isUndecorated
+                Window.frame.isVisible = true
+            }
+
         }
     }
 
