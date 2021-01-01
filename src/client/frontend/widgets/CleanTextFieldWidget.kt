@@ -113,7 +113,7 @@ class CleanTextFieldWidget(
     fun onClick(x: Int, y: Int) {
         isFocused = x > this.x && x < this.x + 400 && y > this.y && y < this.y + 50
 
-        if (x >= (this.x + 850) && x <= ((this.x + 850) + 40) && y >= (y2 + 12) && y <= ((y2 + 12) + 40)) {
+        if (x >= (this.x + 850) - 10 && x <= ((this.x + 850) + 40) + 10 && y >= (y2 + 12) - 10 && y <= ((y2 + 12) + 40) + 10) {
             if (text != "") {
                 text = text.replace("ä", "#ae#")
                 text = text.replace("ö", "#oe#")
@@ -122,6 +122,7 @@ class CleanTextFieldWidget(
                 Client.addMessage(Window.username, text)
                 text = ""
             }
+            println("PRESSED")
         }
 
     }
