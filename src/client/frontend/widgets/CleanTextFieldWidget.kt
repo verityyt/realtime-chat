@@ -92,7 +92,7 @@ class CleanTextFieldWidget(
             g2.fill(RoundRectangle2D.Float(x.toFloat(), y2.toFloat(), 900f, h.toFloat(), arc, arc))
 
             val send = ImageIO.read(File("assets/images/send.png"))
-            g.drawImage(send, x + 850, y2 + 12, observer)
+            g.drawImage(send, x + 850, y2 + 14, observer)
 
             var nr = 0
             for (draw in draws) {
@@ -122,7 +122,6 @@ class CleanTextFieldWidget(
                 Client.addMessage(Window.username, text)
                 text = ""
             }
-            println("PRESSED")
         }
 
     }

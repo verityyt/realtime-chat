@@ -22,7 +22,7 @@ import javax.swing.WindowConstants
 
 object Window {
 
-    var content = WindowContent.LOGIN
+    var content = WindowContent.CHAT
     lateinit var frame: JFrame
     private lateinit var component: JComponent
 
@@ -47,7 +47,7 @@ object Window {
         }
     }
     var chatTextInput =
-        CleanTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 610, 20f, "Write text...", maxLength = 200)
+        CleanTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 120/*610*/, 20f, "Write text...", maxLength = 200)
 
     fun build() {
         FontRenderer.renderAll()
