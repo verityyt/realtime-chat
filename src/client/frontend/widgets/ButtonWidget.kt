@@ -34,7 +34,7 @@ class ButtonWidget(
     }
 
     fun onClick(x: Int, y: Int) {
-        if (x > this.x && x < this.x + 400 && y > this.y && y < this.y + 50) {
+        if (x > this.x && x < this.x + 400 && y > this.y + 20 && y < this.y + 50 + 20) {
             action()
         }
     }
