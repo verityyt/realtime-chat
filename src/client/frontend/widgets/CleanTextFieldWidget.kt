@@ -115,6 +115,9 @@ class CleanTextFieldWidget(
 
         if (x >= (this.x + 850) && x <= ((this.x + 850) + 40) && y >= (y2 + 12) && y <= ((y2 + 12) + 40)) {
             if (text != "") {
+                text = text.replace("ä", "#ae#")
+                text = text.replace("ö", "#oe#")
+                text = text.replace("ü", "#ue#")
                 ChatManager.sendPaket("MESSAGE", text)
                 Client.addMessage(Window.username, text)
                 text = ""
@@ -131,6 +134,9 @@ class CleanTextFieldWidget(
                 text = text.substring(0, text.length - 1)
             }else if(e.keyCode == 10) {
                 if (text != "") {
+                    text = text.replace("ä", "#ae#")
+                    text = text.replace("ö", "#oe#")
+                    text = text.replace("ü", "#ue#")
                     ChatManager.sendPaket("MESSAGE", text)
                     Client.addMessage(Window.username, text)
                     text = ""

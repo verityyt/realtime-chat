@@ -47,7 +47,11 @@ object ChatManager {
         val json = JSONParser().parse(input) as JSONObject
         val action = json["action"].toString()
         val extra = json["extra"].toString()
-        val extra2 = json["extra2"].toString()
+        var extra2 = json["extra2"].toString()
+
+        extra2 = extra2.replace("#ae#","ä")
+        extra2 = extra2.replace("#oe#","ö")
+        extra2 = extra2.replace("#ue#","ü")
 
         if (action == "MESSAGE") {
             Client.addMessage(extra2, extra)
