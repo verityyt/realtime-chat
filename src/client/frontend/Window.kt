@@ -28,6 +28,7 @@ object Window {
 
     var username = ""
     var chatId = ""
+    var state = "Login"
 
     var usernameInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
     var chatIdInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 420, 25f, "Chat-ID", "NUMBERS", 4)
@@ -93,6 +94,7 @@ object Window {
                         number++
                     }
 
+                    state = "Chat #$chatId"
                 }
             }
 
@@ -113,7 +115,7 @@ object Window {
         frame.setSize(1200, 700)
         frame.isResizable = false
         frame.isAlwaysOnTop = false
-        frame.title = "Realtime Chat | Login"
+        frame.title = "Realtime Chat | $state"
 
         frame.iconImage = ImageIO.read(File("assets/images/icon.png"))
 
