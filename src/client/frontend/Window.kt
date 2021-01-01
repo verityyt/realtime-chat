@@ -22,13 +22,12 @@ import javax.swing.WindowConstants
 
 object Window {
 
-    var content = WindowContent.CHAT
+    var content = WindowContent.LOGIN
     lateinit var frame: JFrame
     private lateinit var component: JComponent
 
     var username = ""
     var chatId = ""
-    var state = "Login"
 
     var usernameInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 360, 25f, "Username", "LETTERSNUMBERS")
     var chatIdInput = TextFieldWidget(Color.white, Color.gray, 3f, 400, 420, 25f, "Chat-ID", "NUMBERS", 4)
@@ -47,10 +46,13 @@ object Window {
         }
     }
     var chatTextInput =
-        CleanTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 120/*610*/, 20f, "Write text...", maxLength = 200)
+        CleanTextFieldWidget(Color(255, 255, 255, 150), Color.white, 10, 610, 20f, "Write text...", maxLength = 200)
 
     fun build() {
         FontRenderer.renderAll()
+
+        frame = JFrame()
+        frame.title = "Realtime Chat | Login"
 
         component = object : JComponent() {
             override fun paint(g: Graphics) {
@@ -94,7 +96,7 @@ object Window {
                         number++
                     }
 
-                    state = "Chat #$chatId"
+                    frame.title = "Realtime Chat | Chat #$chatId"
                 }
             }
 
@@ -103,9 +105,7 @@ object Window {
             }
         }
 
-        frame = JFrame()
         frame.add(component)
-
         frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
 
         frame.addMouseListener(MouseListener())
@@ -115,7 +115,6 @@ object Window {
         frame.setSize(1200, 700)
         frame.isResizable = false
         frame.isAlwaysOnTop = false
-        frame.title = "Realtime Chat | $state"
 
         frame.iconImage = ImageIO.read(File("assets/images/icon.png"))
 
